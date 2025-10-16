@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - Tiệm Nước Ép TMT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script> 
+    <style>
+        body { font-family: 'Quicksand', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+        
+        <div id="checkout-content">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-emerald-600">Xác nhận đơn hàng</h1>
+                <p class="text-gray-500 mt-2">Vui lòng kiểm tra lại sản phẩm và chọn phương thức thanh toán.</p>
+            </header>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-6 border-b pb-4">Đơn hàng của bạn</h2>
+                
+                <div id="order-items" class="space-y-4 mb-6">
+                    </div>
+                
+                <div class="border-t pt-4 mb-8">
+                    <div class="flex justify-between items-center text-xl font-bold">
+                        <span>Tổng cộng:</span>
+                        <span id="total-price" class="text-emerald-600">0đ</span>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold mb-6 border-b pb-4">Phương thức thanh toán</h2>
+                <div class="space-y-4">
+                    <button class="w-full flex items-center p-4 border rounded-lg hover:bg-gray-100 transition-colors">
+                        <i data-lucide="landmark" class="w-6 h-6 mr-4 text-blue-600"></i>
+                        <span>Ví điện tử (Momo, ZaloPay)</span>
+                    </button>
+                    <button class="w-full flex items-center p-4 border rounded-lg hover:bg-gray-100 transition-colors">
+                        <i data-lucide="hand-coins" class="w-6 h-6 mr-4 text-green-600"></i>
+                        <span>Thanh toán khi nhận hàng (COD)</span>
+                    </button>
+                </div>
+                
+                <button id="confirm-payment-button" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg mt-10 hover:bg-emerald-600 transition-colors duration-300 shadow-md">
+                    Hoàn tất đặt hàng
+                </button>
+            </div>
+        </div>
+
+        <div id="thank-you-message" class="hidden text-center p-10 bg-white rounded-2xl shadow-lg">
+            <h1 class="text-4xl font-bold text-emerald-600 mb-4">Đặt hàng thành công!</h1>
+            <p class="text-gray-600 text-lg mb-8">Cảm ơn bạn đã tin tưởng và lựa chọn Tiệm Nước Ép TMT.<br>Đơn hàng của bạn đang được chuẩn bị:3</p>
+            <a href="WebBanTraCay.html" class="bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-600 transition-colors">
+                Quay về trang chủ
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // Hàm định dạng tiền tệ
+        const formatCurrency = (number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number).replace('₫', 'đ');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderItemsContainer = document.getElementById('order-items');
+            const totalPriceElement = document.getElementById('total-price');
+            const confirmButton = document.getElementById('confirm-payment-button');
+            const checkoutContent = document.getElementById('checkout-content');
+            const thankYouMessage = document.getElementById('thank-you-message');
+
+            // 1. Lấy giỏ hàng từ "kho" localStorage
+            const cartData = localStorage.getItem('shoppingCart');
+            const cart = cartData ? JSON.parse(cartData) : [];
+
+            // 2. Hiển thị sản phẩm và tính tổng tiền
+            if (cart.length > 0) {
+                let total = 0;
+                cart.forEach(item => {
+                    const itemHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold">${item.name} <span class="text-gray-500 font-normal">x${item.quantity}</span></p>
+                                <p class="text-sm text-gray-500">${formatCurrency(item.price)}</p>
+                            </div>
+                            <p class="font-semibold">${formatCurrency(item.price * item.quantity)}</p>
+                        </div>
+                    `;
+                    orderItemsContainer.innerHTML += itemHTML;
+                    total += item.price * item.quantity;
+                });
+                totalPriceElement.textContent = formatCurrency(total);
+            } else {
+                checkoutContent.innerHTML = '<p class="text-center text-gray-500">Giỏ hàng của bạn đang trống.</p>';
+            }
+
+            // 3. Xử lý khi nhấn nút hoàn tất
+            confirmButton.addEventListener('click', () => {
+                // Xóa giỏ hàng khỏi kho để lần sau mua sắm là giỏ hàng mới
+                localStorage.removeItem('shoppingCart');
+
+                // Ẩn nội dung thanh toán và hiện lời cảm ơn
+                checkoutContent.classList.add('hidden');
+                thankYouMessage.classList.remove('hidden');
+            });
+            
+            // Vẽ các icon
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
