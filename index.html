@@ -160,8 +160,6 @@
             }
             updateTotalPrice();
         };
-        // (Copy hàm renderCart và updateTotalPrice từ code cũ của bạn vào đây nếu cần, nhưng code bên dưới đã bao gồm logic cập nhật)
-        
         const updateTotalPrice = () => {
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             totalPriceElement.textContent = formatCurrency(total);
@@ -282,3 +280,4 @@
     </script>
 </body>
 </html>
+
