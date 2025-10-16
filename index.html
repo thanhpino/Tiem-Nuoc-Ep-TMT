@@ -25,7 +25,7 @@
         }
         .mix-option.selected {
             border-color: #10b981; /* Emerald-500 */
-            background-color: #ecfdf5; /* Emerald-50 */
+            background-color: #ecfdf5; 
             transform: translateY(-4px);
         }
     </style>
@@ -47,9 +47,9 @@
 
             <aside class="w-full lg:w-1/3">
                 <div class="bg-white p-6 rounded-2xl shadow-lg sticky top-8">
-                    <h2 class="text-2xl font-semibold mb-6 border-b pb-4 text-gray-700">Giỏ hàng của bạn</h2>
+                    <h2 class="text-2xl font-semibold mb-6 border-b pb-4 text-gray-700">Giỏ nước của bạn</h2>
                     <div id="cart-items" class="space-y-4 mb-6 min-h-[100px]">
-                        <p id="empty-cart-message" class="text-gray-400">Giỏ hàng đang trống...</p>
+                        <p id="empty-cart-message" class="text-gray-400">Giỏ nước đang trống...</p>
                     </div>
                     <div class="border-t pt-4">
                         <div class="flex justify-between items-center text-xl font-bold">
@@ -91,17 +91,17 @@
 
     <script>
         const products = [
-            { id: 1, name: 'Nước ép Táo', price: 45000, description: 'Giàu vitamin và chất xơ.', image: 'images/tao.jpg' },
-            { id: 2, name: 'Nước ép Xoài', price: 50000, description: 'Vị ngọt nhiệt đới.', image: 'images/xoai.jpg' },
-            { id: 3, name: 'Nước ép Đu Đủ', price: 40000, description: 'Làn da sáng mịn, khoẻ mạnh.', image: 'images/dudu.jpg' },
-            { id: 4, name: 'Nước ép Dưa Lưới', price: 55000, description: 'Thanh mát, giải nhiệt.', image: 'images/dualuoi.jpg'},
-            { id: 5, name: 'Nước ép Dưa Hấu', price: 40000, description: 'Hoàn hảo cho ngày nóng.', image: 'images/duahau.jpg' },
-            { id: 6, name: 'Nước ép Cam', price: 45000, description: 'Giàu vitamin C.', image: 'images/cam.jpg' },
-            { id: 7, name: 'Nước ép Chanh Dây', price: 50000, description: 'Giúp tiêu hóa và làm đẹp da.', image: 'images/chanhday.jpg' },
-            { id: 8, name: 'Nước ép Cà Rốt', price: 40000, description: 'Tốt cho mắt và da.', image: 'images/carot.jpg' },
-            { id: 9, name: 'Nước ép Dứa', price: 45000, description: 'Hỗ trợ tiêu hóa và giảm viêm.', image: 'images/dua.jpg' },
-            { id: 10, name: 'Nước ép Việt Quất', price: 45000, description: 'Việt Quất ngon nghẻ.', image: 'images/vietquat.jpg' },
-            { id: 11, name: 'Mix tùy chọn', price: 90000, description: 'Chọn 2 loại nước ép bất kỳ.', image: 'images/mix.jpg' },
+            { id: 1, name: 'Nước ép Táo', price: 45000, description: 'Giàu vitamin và chất xơ.', image: '/tao.jpg' },
+            { id: 2, name: 'Nước ép Xoài', price: 50000, description: 'Vị ngọt nhiệt đới.', image: '/xoai.jpg' },
+            { id: 3, name: 'Nước ép Đu Đủ', price: 40000, description: 'Làn da sáng mịn, khoẻ mạnh.', image: '/dudu.jpg' },
+            { id: 4, name: 'Nước ép Dưa Lưới', price: 55000, description: 'Thanh mát, giải nhiệt.', image: '/dualuoi.jpg'},
+            { id: 5, name: 'Nước ép Dưa Hấu', price: 40000, description: 'Hoàn hảo cho ngày nóng.', image: '/duahau.jpg' },
+            { id: 6, name: 'Nước ép Cam', price: 45000, description: 'Giàu vitamin C.', image: '/cam.jpg' },
+            { id: 7, name: 'Nước ép Chanh Dây', price: 50000, description: 'Giúp tiêu hóa và làm đẹp da.', image: '/chanhday.jpg' },
+            { id: 8, name: 'Nước ép Cà Rốt', price: 40000, description: 'Tốt cho mắt và da.', image: '/carot.jpg' },
+            { id: 9, name: 'Nước ép Dứa', price: 45000, description: 'Hỗ trợ tiêu hóa và giảm viêm.', image: '/dua.jpg' },
+            { id: 10, name: 'Nước ép Việt Quất', price: 45000, description: 'Việt Quất ngon nghẻ.', image: '/vietquat.jpg' },
+            { id: 11, name: 'Mix tùy chọn', price: 90000, description: 'Chọn 2 loại nước ép bất kỳ.', image: '/mix.jpg' },
         ];
 
         let cart = [];
@@ -280,4 +280,5 @@
     </script>
 </body>
 </html>
+
 
