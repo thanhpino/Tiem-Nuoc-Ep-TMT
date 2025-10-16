@@ -17,14 +17,16 @@
             background-color: #9ca3af; 
             cursor: not-allowed;
         }
-        .modal-content-transition {
-            transition: all 0.3s ease-in-out;
-        }
         .product-image-zoom {
             transition: transform 0.3s ease-in-out;
         }
         .group:hover .product-image-zoom {
             transform: scale(1.05);
+        }
+        .mix-option.selected {
+            border-color: #10b981; /* Emerald-500 */
+            background-color: #ecfdf5; /* Emerald-50 */
+            transform: translateY(-4px);
         }
     </style>
 </head>
@@ -54,7 +56,7 @@
                             <span>Tổng cộng:</span>
                             <span id="total-price" class="text-emerald-600">0đ</span>
                         </div>
-                        <button id="checkout-button" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg mt-6 hover:bg-emerald-600 transition-colors duration-300 shadow-md hover:shadow-lg" disabled>
+                        <button id="checkout-button" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg mt-6 hover:bg-emerald-600 transition-colors duration-300 shadow-md" disabled>
                             Thanh toán
                         </button>
                     </div>
@@ -62,26 +64,24 @@
             </aside>
         </main>
     </div>
-
-    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md modal-content-transition scale-95 opacity-0" id="modal-content">
+    
+    <div id="mix-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Chọn phương thức thanh toán</h2>
-                <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
+                <h2 class="text-2xl font-bold text-gray-800">Tùy chọn Mix Juice</h2>
+                <button id="close-mix-modal-button" class="text-gray-400 hover:text-gray-600">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="space-y-4">
-                <button class="w-full flex items-center p-4 border rounded-lg hover:bg-gray-100 transition-colors">
-                    <i data-lucide="landmark" class="w-6 h-6 mr-4 text-blue-600"></i>
-                    <span>Ví điện tử (Momo, ZaloPay)</span>
-                </button>
-                <button class="w-full flex items-center p-4 border rounded-lg hover:bg-gray-100 transition-colors">
-                    <i data-lucide="hand-coins" class="w-6 h-6 mr-4 text-green-600"></i>
-                    <span>Thanh toán khi nhận hàng (COD)</span>
+            <p class="text-gray-500 mb-6">Vui lòng chọn <span class="font-bold text-emerald-600">2 loại nước ép</span> để mix.</p>
+            <div id="mix-options-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto pr-2 flex-grow">
+                </div>
+            <div class="border-t pt-6 mt-6">
+                 <p id="mix-message" class="text-center text-red-500 mb-4 h-5"></p>
+                <button id="confirm-mix-button" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg hover:bg-emerald-600 transition-colors duration-300 shadow-md" disabled>
+                    Xác nhận Mix (90.000đ)
                 </button>
             </div>
-            <p class="text-center text-gray-500 text-sm mt-8">Cảm ơn bạn đã lựa chọn Tiệm Nước Ép TMT!</p>
         </div>
     </div>
 
@@ -91,18 +91,19 @@
 
     <script>
         const products = [
-            { id: 1, name: 'Nước ép Táo', price: 45000, description: 'Giàu vitamin và chất xơ, tốt cho hệ tiêu hoá.', image: '/tao.jpg' },
-            { id: 2, name: 'Nước ép Xoài', price: 50000, description: 'Vị ngọt nhiệt đới, tăng cường hệ miễn dịch.', image: '/xoai.jpg' },
-            { id: 3, name: 'Nước ép Đu Đủ', price: 40000, description: 'Enzyme papain giúp làn da sáng mịn, khoẻ mạnh.', image:'/dudu.jpg' },
-            { id: 4, name: 'Nước ép Dưa Lưới', price: 55000, description: 'Thanh mát, giải nhiệt và cung cấp nước cho cơ thể.', image: '/dualuoi.jpg'},
-            { id: 5, name: 'Nước ép Dưa Hấu', price: 40000, description: 'Mọng nước, là lựa chọn hoàn hảo cho ngày nóng.', image: '/duahau.jpg' },
-            { id: 6, name: 'Nước ép Cam', price: 45000, description: 'Giàu vitamin C, tăng cường sức đề kháng.', image: '/cam.jpg' },
-            { id: 7, name: 'Nước ép Chanh Dây', price: 50000, description: 'Vị chua nhẹ, giúp tiêu hóa và làm đẹp da.', image: '/chanhday.jpg' },
-            { id: 8, name: 'Nước ép Cà Rốt', price: 40000, description: 'Giàu beta-carotene, tốt cho mắt và da.', image: '/carot.jpg' },
-            { id: 9, name: 'Nước ép Dứa', price: 45000, description: 'Chứa enzyme bromelain, hỗ trợ tiêu hóa và giảm viêm.', image: '/dua.jpg' },
-            { id: 10, name: 'Nước ép Việt Quất', price: 45000, description: 'Việt Quất ngon nghẻ, mời bạn thử.', image: '/vietquat.jpg' },
-            { id: 11, name: 'Mix tùy chọn', price: 90000, description: 'Ở đây cần bạn mix sao cho xịn.', image: '/mix.jpg' },
+            { id: 1, name: 'Nước ép Táo', price: 45000, description: 'Giàu vitamin và chất xơ.', image: 'images/tao.jpg' },
+            { id: 2, name: 'Nước ép Xoài', price: 50000, description: 'Vị ngọt nhiệt đới.', image: 'images/xoai.jpg' },
+            { id: 3, name: 'Nước ép Đu Đủ', price: 40000, description: 'Làn da sáng mịn, khoẻ mạnh.', image: 'images/dudu.jpg' },
+            { id: 4, name: 'Nước ép Dưa Lưới', price: 55000, description: 'Thanh mát, giải nhiệt.', image: 'images/dualuoi.jpg'},
+            { id: 5, name: 'Nước ép Dưa Hấu', price: 40000, description: 'Hoàn hảo cho ngày nóng.', image: 'images/duahau.jpg' },
+            { id: 6, name: 'Nước ép Cam', price: 45000, description: 'Giàu vitamin C.', image: 'images/cam.jpg' },
+            { id: 7, name: 'Nước ép Chanh Dây', price: 50000, description: 'Giúp tiêu hóa và làm đẹp da.', image: 'images/chanhday.jpg' },
+            { id: 8, name: 'Nước ép Cà Rốt', price: 40000, description: 'Tốt cho mắt và da.', image: 'images/carot.jpg' },
+            { id: 9, name: 'Nước ép Dứa', price: 45000, description: 'Hỗ trợ tiêu hóa và giảm viêm.', image: 'images/dua.jpg' },
+            { id: 10, name: 'Nước ép Việt Quất', price: 45000, description: 'Việt Quất ngon nghẻ.', image: 'images/vietquat.jpg' },
+            { id: 11, name: 'Mix tùy chọn', price: 90000, description: 'Chọn 2 loại nước ép bất kỳ.', image: 'images/mix.jpg' },
         ];
+
         let cart = [];
 
         const productGrid = document.getElementById('product-grid');
@@ -110,30 +111,29 @@
         const emptyCartMessage = document.getElementById('empty-cart-message');
         const totalPriceElement = document.getElementById('total-price');
         const checkoutButton = document.getElementById('checkout-button');
-        const paymentModal = document.getElementById('payment-modal');
-        const modalContent = document.getElementById('modal-content');
-        const closeModalButton = document.getElementById("close-modal-button");
+        
+        // Lấy các phần tử của Modal Mix
+        const mixModal = document.getElementById('mix-modal');
+        const mixOptionsGrid = document.getElementById('mix-options-grid');
+        const closeMixModalButton = document.getElementById('close-mix-modal-button');
+        const confirmMixButton = document.getElementById('confirm-mix-button');
+        const mixMessage = document.getElementById('mix-message');
 
         const formatCurrency = (number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number).replace('₫', 'đ');
         
         const renderProducts = () => {
-            productGrid.innerHTML = products.map(product => `
+             productGrid.innerHTML = products.map(product => `
                 <div class="group bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col">
-                    <div class="overflow-hidden">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover product-image-zoom">
-                    </div>
+                    <div class="overflow-hidden"><img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover product-image-zoom"></div>
                     <div class="p-5 flex flex-col flex-grow">
                         <h3 class="text-xl font-bold text-gray-800">${product.name}</h3>
                         <p class="text-gray-500 mt-2 flex-grow">${product.description}</p>
                         <div class="flex justify-between items-center mt-4">
                             <span class="text-lg font-semibold text-emerald-600">${formatCurrency(product.price)}</span>
-                            <button onclick="addToCart(${product.id})" class="bg-emerald-50 text-emerald-600 font-semibold px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors duration-200">
-                                Thêm vào giỏ
-                            </button>
+                            <button onclick="addToCart(${product.id})" class="bg-emerald-50 text-emerald-600 font-semibold px-4 py-2 rounded-lg hover:bg-emerald-100 transition-colors duration-200">Thêm vào giỏ</button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         };
         
         const renderCart = () => {
@@ -160,21 +160,32 @@
             }
             updateTotalPrice();
         };
-
+        // (Copy hàm renderCart và updateTotalPrice từ code cũ của bạn vào đây nếu cần, nhưng code bên dưới đã bao gồm logic cập nhật)
+        
         const updateTotalPrice = () => {
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             totalPriceElement.textContent = formatCurrency(total);
         };
-
-        window.addToCart = (productId) => {
-            const product = products.find(p => p.id === productId);
-            const cartItem = cart.find(item => item.id === productId);
-            if (cartItem) {
-                cartItem.quantity++;
+        
+        window.renderCart = () => {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '';
+                emptyCartMessage.style.display = 'block';
+                checkoutButton.disabled = true;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                emptyCartMessage.style.display = 'none';
+                checkoutButton.disabled = false;
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="flex justify-between items-center">
+                        <div><p class="font-semibold">${item.name}</p><p class="text-sm text-gray-500">${formatCurrency(item.price)}</p></div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 bg-gray-200 rounded-full font-bold flex items-center justify-center">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 bg-gray-200 rounded-full font-bold flex items-center justify-center">+</button>
+                        </div>
+                    </div>`).join('');
             }
-            renderCart();
+            updateTotalPrice();
         };
 
         window.updateQuantity = (productId, change) => {
@@ -188,9 +199,76 @@
             renderCart();
         };
 
+        // Hàm mix
+        const openMixModal = () => {
+            mixMessage.textContent = ''; 
+            const mixableProducts = products.filter(p => p.id !== 11);
+            mixOptionsGrid.innerHTML = mixableProducts.map(p => `
+                <button class="mix-option text-left p-3 border-2 rounded-lg transition-all duration-200" data-name="${p.name}">
+                    <img src="${p.image}" class="w-full h-20 object-cover rounded mb-2">
+                    <span class="font-semibold">${p.name}</span>
+                </button>
+            `).join('');
+            mixModal.classList.remove('hidden');
+        };
+
+        const closeMixModal = () => {
+            mixModal.classList.add('hidden');
+            confirmMixButton.disabled = true; 
+        };
+
+        mixOptionsGrid.addEventListener('click', (event) => {
+            const clickedOption = event.target.closest('.mix-option');
+            if (!clickedOption) return;
+            clickedOption.classList.toggle('selected');
+            const selectedOptions = mixOptionsGrid.querySelectorAll('.mix-option.selected');
+            if (selectedOptions.length > 2) {
+                mixMessage.textContent = 'Chỉ được chọn tối đa 2 loại!';
+                clickedOption.classList.remove('selected'); 
+            } else {
+                mixMessage.textContent = ''; 
+            }
+            
+            confirmMixButton.disabled = selectedOptions.length !== 2;
+        });
+        confirmMixButton.addEventListener('click', () => {
+            const selectedOptions = mixOptionsGrid.querySelectorAll('.mix-option.selected');
+            if (selectedOptions.length === 2) {
+                const name1 = selectedOptions[0].dataset.name;
+                const name2 = selectedOptions[1].dataset.name;
+                
+                const mixedJuice = {
+                    id: Date.now(), 
+                    name: `Mix: ${name1} & ${name2}`,
+                    price: 90000,
+                    quantity: 1,
+                };
+                
+                cart.push(mixedJuice);
+                renderCart();
+                closeMixModal();
+            }
+        });
+
+        closeMixModalButton.addEventListener('click', closeMixModal);
+
+        window.addToCart = (productId) => {
+            if (productId === 11) {
+                openMixModal();
+                return; 
+            }
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+            if (cartItem) {
+                cartItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            renderCart();
+        };
         checkoutButton.addEventListener('click', () => {
             if (cart.length > 0) {
-                localStorage.setItem('shoppingCart', JSON.stringify(cart)); // ✅ Sửa thành "localStorage"
+                localStorage.setItem('shoppingCart', JSON.stringify(cart));
                 window.location.href = 'thanhtoan.html';
             }
         });
@@ -204,13 +282,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
