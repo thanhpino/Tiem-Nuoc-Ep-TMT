@@ -15,10 +15,9 @@
             background-color: #9ca3af; 
             cursor: not-allowed;
         }
-        /* Style cho nút được chọn */
         .selected-payment {
             border-color: #10b981; /* Emerald 500 */
-            background-color: #ecfdf5; /* Emerald 50 */
+            background-color: #ecfdf5; 
         }
     </style>
 </head>
@@ -57,7 +56,7 @@
                     <button id="cod-button" class="payment-method w-full flex justify-between items-center p-4 border rounded-lg hover:bg-gray-100 transition-all duration-200">
                         <div class="flex items-center">
                             <i data-lucide="hand-coins" class="w-6 h-6 mr-4 text-green-600"></i>
-                            <span>Thanh toán khi nhận hàng (COD)</span>
+                            <span>Thanh toán khi nhận nước (COD)</span>
                         </div>
                         <i data-lucide="check-circle-2" class="w-6 h-6 text-emerald-500 hidden"></i>
                     </button>
@@ -83,7 +82,6 @@
         const formatCurrency = (number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number).replace('₫', 'đ');
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Lấy các phần tử HTML cần dùng
             const orderItemsContainer = document.getElementById('order-items');
             const totalPriceElement = document.getElementById('total-price');
             const confirmButton = document.getElementById('confirm-payment-button');
@@ -135,11 +133,8 @@
                 // 3. Kích hoạt nút hoàn tất
                 confirmButton.disabled = false;
             };
-
-            // Xử lý khi nhấn nút hoàn tất
             confirmButton.addEventListener('click', () => {
                 let message = "Cảm ơn bạn đã tin tưởng và lựa chọn Tiệm Nước Ép của mình.<br>Đơn hàng của bạn đang được chuẩn bị.";
-
                 if (selectedPaymentMethod === 'ewallet') {
                     // Mô phỏng chuyển đến cổng thanh toán
                     alert('Đang chuyển đến cổng thanh toán MoMo/ZaloPay...');
@@ -148,9 +143,7 @@
                     // Hiển thị thông báo riêng cho COD
                     message = "Hãy chuẩn bị tiền mặt nhé cậu :3<br>" + message;
                 }
-                
                 finalMessage.innerHTML = message;
-
                 // Xóa giỏ hàng và hiển thị lời cảm ơn
                 localStorage.removeItem('shoppingCart');
                 checkoutContent.classList.add('hidden');
@@ -164,4 +157,3 @@
     </script>
 </body>
 </html>
-
