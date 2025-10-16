@@ -27,12 +27,12 @@
         
         <div id="checkout-content">
             <header class="text-center mb-10">
-                <h1 class="text-4xl font-bold text-emerald-600">Xác nhận đơn hàng</h1>
+                <h1 class="text-4xl font-bold text-emerald-600">Xác nhận đơn nước</h1>
                 <p class="text-gray-500 mt-2">Vui lòng kiểm tra lại sản phẩm và chọn phương thức thanh toán.</p>
             </header>
 
             <div class="bg-white p-8 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-semibold mb-6 border-b pb-4">Đơn hàng của bạn</h2>
+                <h2 class="text-2xl font-semibold mb-6 border-b pb-4">Đơn nước của bạn</h2>
                 
                 <div id="order-items" class="space-y-4 mb-6">
                     </div>
@@ -63,13 +63,13 @@
                 </div>
                 
                 <button id="confirm-payment-button" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg mt-10 hover:bg-emerald-600 transition-colors duration-300 shadow-md" disabled>
-                    Hoàn tất đặt hàng
+                    Hoàn tất đặt nước
                 </button>
             </div>
         </div>
 
         <div id="thank-you-message" class="hidden text-center p-10 bg-white rounded-2xl shadow-lg">
-            <h1 class="text-4xl font-bold text-emerald-600 mb-4">Đặt hàng thành công!</h1>
+            <h1 class="text-4xl font-bold text-emerald-600 mb-4">Đặt nước thành công!</h1>
             <p id="final-message" class="text-gray-600 text-lg mb-8"></p>
             <a href="index.html" class="bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-600 transition-colors">
                 Quay về trang chủ
@@ -96,7 +96,7 @@
             // Biến để lưu trữ phương thức thanh toán đã chọn
             let selectedPaymentMethod = null;
 
-            // Hiển thị giỏ hàng (giữ nguyên như cũ)
+            // Hiển thị giỏ nước
             const cartData = localStorage.getItem('shoppingCart');
             const cart = cartData ? JSON.parse(cartData) : [];
             if (cart.length > 0) {
@@ -107,7 +107,7 @@
                 });
                 totalPriceElement.textContent = formatCurrency(total);
             } else {
-                checkoutContent.innerHTML = '<p class="text-center text-gray-500">Giỏ hàng của bạn đang trống. <a href="index.html" class="text-emerald-500 hover:underline">Quay lại mua sắm</a></p>';
+                checkoutContent.innerHTML = '<p class="text-center text-gray-500">Giỏ nước của bạn đang trống. <a href="index.html" class="text-emerald-500 hover:underline">Quay lại mua sắm</a></p>';
             }
             
             // Xử lý khi chọn phương thức thanh toán
@@ -134,7 +134,7 @@
                 confirmButton.disabled = false;
             };
             confirmButton.addEventListener('click', () => {
-                let message = "Cảm ơn bạn đã tin tưởng và lựa chọn Tiệm Nước Ép của mình.<br>Đơn hàng của bạn đang được chuẩn bị.";
+                let message = "Cảm ơn bạn đã tin tưởng và lựa chọn Tiệm Nước Ép của mình.<br>Đơn nước của bạn đang được chuẩn bị.";
                 if (selectedPaymentMethod === 'ewallet') {
                     // Mô phỏng chuyển đến cổng thanh toán
                     alert('Đang chuyển đến cổng thanh toán MoMo/ZaloPay...');
@@ -144,7 +144,7 @@
                     message = "Hãy chuẩn bị tiền mặt nhé cậu :3<br>" + message;
                 }
                 finalMessage.innerHTML = message;
-                // Xóa giỏ hàng và hiển thị lời cảm ơn
+                // Xóa giỏ nước và hiển thị lời cảm ơn
                 localStorage.removeItem('shoppingCart');
                 checkoutContent.classList.add('hidden');
                 thankYouMessage.classList.remove('hidden');
